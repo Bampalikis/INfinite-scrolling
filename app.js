@@ -10,7 +10,7 @@ let reachedEnd = false; // Flag to indicate if all posts have been loaded
 let postsInFeed = [];
 
 // Hardcoded comments data, simulating an API response. This would ideally come from a real API.
-const hardComm = [
+const hardcodedComments = [
     [ // Comments for post 1
         { name: "Alice", email: "alice@example.com", body: "Great post!" },
         { name: "Bob", email: "bob@example.com", body: "I agree!" },
@@ -29,7 +29,7 @@ const hardComm = [
 ];
 
 // Generates a random timestamp string like "X days ago"
-const timestamp = () => {
+const generateTimestamp = () => {
     const daysAgo = Math.floor(Math.random() * 10) + 1;
     return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
 };
@@ -81,13 +81,13 @@ const Users = async () => {
 
 
 // Simulates fetching comments for a given post ID
-const comments = async (postId) => {
+const getComments = async (postId) => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // Use the postId to get the corresponding comments from the hardcoded array.
     // The modulo operator (%) handles cases where postId is larger than the available comments sets.
-    const comments = hardComm[(postId - 1) % hardComm.length] || [];
+    const comments = hardcodedComments[(postId - 1) % hardcodedComments.length] || [];
     return comments;
 };
 
@@ -104,7 +104,7 @@ const showPosts = async (posts) => {
                     <img src="https://i.pravatar.cc/50?img=${Math.floor(Math.random() * 70) + 1}" alt="User Avatar">
                     <div class="user-info">
                         <span class="username">${username}</span>
-                        <span class="timestamp">${timestamp()}</span>
+                        <span class="timestamp">${generateTimestamp()}</span>
                     </div>
                 </div>
                 <div class="content">
@@ -122,7 +122,7 @@ const showPosts = async (posts) => {
             const likeBtn = postEl.querySelector('.like-btn');
             const commentBtn = postEl.querySelector('.comment-btn');
 
-            likeBtn.addEventListener('click', () => likeBtn(likeBtn));
+            likeBtn.addEventListener('click', () => handleLike(likeBtn));
             commentBtn.addEventListener('click', () => handleComments(post.id));
         } catch (error) {
             console.error("Error creating or adding post:", error);
@@ -132,7 +132,7 @@ const showPosts = async (posts) => {
 
 
 // Handles like button clicks
-const likeBtn = (button) => {
+const handleLike = (button) => {
     const postEl = button.closest('.post'); // Find the parent post element
     let likes = parseInt(button.dataset.likes, 10); // Get current like count
 
@@ -163,7 +163,7 @@ const handleComments = async (postId) => {
 
 
     try {
-        const comments = await comments(postId);
+        const comments = await getComments(postId);
 
         comments.forEach(comment => {
             const commentEl = document.createElement('div');
