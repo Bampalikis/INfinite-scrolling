@@ -1,31 +1,31 @@
 let currentPage = 1; 
-const limit = 5; // Number of posts to load per page
-let total = 0; // Total number of posts 
-const feedEl = document.querySelector('.feed'); // The element where posts will be displayed
-const loader = document.querySelector('.loader'); // The loading indicator element
-let isLoading = false; // Flag to prevent multiple loading requests
-let reachedEnd = false; // Flag to indicate if all posts have been loaded
+const limit = 5; 
+let total = 0; 
+const feedEl = document.querySelector('.feed'); 
+const loader = document.querySelector('.loader'); 
+let isLoading = false; 
+let reachedEnd = false; 
 
 // Keep track of the posts currently displayed in the feed
 let postsInFeed = [];
 
-// Hardcoded comments data, simulating an API response. This would ideally come from a real API.
+// Hardcoded comments data
 const hardcodedComments = [
-    [ // Comments for post 1
+    [ 
         { name: "Alice", email: "alice@example.com", body: "Great post!" },
         { name: "Bob", email: "bob@example.com", body: "I agree!" },
         { name: "Charlie", email: "charlie@example.com", body: "Interesting perspective." }
     ],
-    [ // Comments for post 2
+    [ 
         { name: "David", email: "david@example.com", body: "This is helpful." },
         { name: "Eve", email: "eve@example.com", body: "Thanks for sharing." }
     ],
-    [ // Comments for post 3
+    [ 
         { name: "Frank", email: "frank@example.com", body: "I learned something new." },
         { name: "Grace", email: "grace@example.com", body: "Well written." },
         { name: "Henry", email: "henry@example.com", body: "I have a question..." }
     ],
-    // Add more comment sets for more posts as needed
+    // Add more comment sets
 ];
 
 // Generates a random timestamp string like "X days ago"
@@ -85,8 +85,6 @@ const getComments = async (postId) => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Use the postId to get the corresponding comments from the hardcoded array.
-    // The modulo operator (%) handles cases where postId is larger than the available comments sets.
     const comments = hardcodedComments[(postId - 1) % hardcodedComments.length] || [];
     return comments;
 };
@@ -133,7 +131,7 @@ const showPosts = async (posts) => {
 
 // Handles like button clicks
 const handleLike = (button) => {
-    const postEl = button.closest('.post'); // Find the parent post element
+    const postEl = button.closest('.post'); 
     let likes = parseInt(button.dataset.likes, 10); // Get current like count
 
     if (button.dataset.liked === "true") { // Unlike the post
@@ -209,7 +207,7 @@ const loadPosts = async (page, limit) => {
             return;
         }
 
-        await showPosts(posts); // Display the fetched posts
+        await showPosts(posts); 
         postsInFeed.push(...posts); // Add the new posts to the tracking array
 
         // Limit the number of posts in the feed to 20, removing older posts if necessary
@@ -218,7 +216,7 @@ const loadPosts = async (page, limit) => {
         }
 
 
-        total = 100; // This is a placeholder.  You'll need a way to get the real total from the API if pagination is actually needed.
+        total = 100; // This is a placeholder
 
     } catch (error) {
         console.error(error.message);
